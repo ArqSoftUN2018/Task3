@@ -127,5 +127,5 @@ func main(){
 			"Mensaje": fmt.Sprintf("se ha borrado la lista exitosamente"),
 		})
 	})
-	router.Run(":3003")
+	router.Run(":3002")
 }
