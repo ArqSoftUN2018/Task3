@@ -9,7 +9,7 @@ import (
 )
 
 func main(){
-	db,err := sql.Open("mysql","root:password@tcp(127.0.0.1:3306/lists)")
+	db,err := sql.Open("mysql","root:password@tcp(127.0.0.1:3306)/lists")
 	if err != nil{
 		fmt.Println(err.Error())
 	}
@@ -28,6 +28,7 @@ func main(){
 	}
 
 	router := gin.Default()
+	
 	router.GET("/lista/:id", func(c * gin.Context){
 		var (
 			objeto listas
@@ -35,48 +36,52 @@ func main(){
 		)
 		id := c.Param("id")
 		row := db.QueryRow("Select * from listas where id = ?;", id)
-		err := row.Scan(&objeto.id,&objeto.nombre,&objeto.tablero,&objeto.archivado)
+		err = row.Scan(&objeto.id,&objeto.nombre,&objeto.tablero,&objeto.archivado)
 		if err != nil {
 			resultado = gin.H {
-				"resultado": nil,
-				"cantidad":0,
 			}
 		}else{
 			resultado = gin.H {
-				"resultado": objeto,
-				"cantidad": 1,
+				"id": objeto.id,
+				"nombre": objeto.nombre,
+				"tablero": objeto.tablero,
+				"archivado": objeto.archivado,
 			}
-			c.JSON(http.StatusOK, resultado)
 		}
+		c.JSON(http.StatusOK, resultado)
 	})
 
 	router.GET("/listas", func(c * gin.Context){
 		var (
 			objeto listas
-			objetos []listas
+			objetos gin.H
+			resultado []gin.H
 		)
-		rows,err := db.Query("Select * from listas;")
+		rows,err := db.Query("Select id,nombre,tablero,archivado from listas;")
 		if err != nil {
 			fmt.Println(err.Error())
 		}  
 		for rows.Next(){
 			err := rows.Scan(&objeto.id,&objeto.nombre,&objeto.tablero,&objeto.archivado)
-			objetos = append(objetos,objeto)
+			objetos = gin.H {
+				"id": objeto.id,
+				"nombre": objeto.nombre,
+				"tablero": objeto.tablero,
+				"archivado": objeto.archivado,
+			}
+			resultado = append(resultado,objetos)
 			if err != nil {
 				fmt.Println(err.Error())
 			}
 		}
 		defer rows.Close()
-		c.JSON(http.StatusOK, gin.H{
-			"resultado": objetos,
-			"cantidad": len(objetos),
-		})
+		c.JSON(http.StatusOK, resultado)
 	})
 	router.POST("/lista", func(c * gin.Context){
 		nombre := c.PostForm("nombre")
 		tablero := c.PostForm("tablero")
 		archivado := false
-		stmt, err := db.Prepare("insert into listas (nombre, tablero, archivado) values(?,?);")
+		stmt, err := db.Prepare("insert into listas (nombre, tablero, archivado) values(?,?,?);")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
@@ -122,5 +127,5 @@ func main(){
 			"Mensaje": fmt.Sprintf("se ha borrado la lista exitosamente"),
 		})
 	})
-	router.Run(":8080")
+	router.Run(":3003")
 }
