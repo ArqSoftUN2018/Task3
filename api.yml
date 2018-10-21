@@ -1,0 +1,190 @@
+#Test with: http://editor.swagger.io/
+
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Microservicio para listas
+  description: GO + MySQL
+  license:
+    name: microservicio listas
+host: 192.168.99.101:3000
+basePath: /listasMicroservicio/listas
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /listas:
+    post:
+      summary: Crear una nueva lista
+      operationId: crearLista
+      parameters:
+        - name: lista
+          in: body
+          required: true
+          description: Course Object
+          schema:
+            $ref: '#/definitions/ListaInput'
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/ErrorModel'
+    get:
+      summary: Regresa todas las listas
+      operationId: obtenerListas
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Listas'
+        '406':
+          description: Not aceptable (parametros invalidos)
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Error interno del servidor
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+  /listas/{id}:
+    get:
+      summary: Regresa una lista con id dado
+      operationId: obtenerLista
+      parameters:
+        - name: id
+          in: path
+          description: El id de la lista ha ser obtenido
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Lista'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: No aceptable (parametros invalidos)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: error inesperador
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    put:
+      summary: actualiza una lista con un id dad
+      operationId: actualizarLista
+      parameters:
+        - name: id
+          in: path
+          description: El id de la lista ha ser actualizada
+          required: true
+          type: integer
+        - name: lista
+          in: body
+          required: true
+          description: Objeto Lista
+          schema:
+            $ref: '#/definitions/ListaInput'
+      responses:
+        '204':
+          description: No Contenido
+        '404':
+          description: No Encontrada
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: No aceptable (Parametros invalidos)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Error inesperado
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+    delete:
+      summary: Elimina una lista con un id dado
+      operationId: deleteCourse
+      parameters:
+        - name: id
+          in: path
+          description: El id de la lista ha ser eliminada
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+        '404':
+          description: No Encontrada
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: No Aceptable (Parametros Invalidos)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: Error Inesperado
+          schema:
+            $ref: '#/definitions/ErrorModel'
+
+definitions:
+
+  # Listas
+  Lista:
+    type: object
+    properties:
+      id:
+        type: integer
+      nombre:
+        type: string
+      tablero:
+        type: integer
+      archivado:
+        type: boolean
+
+  ListaInput:
+    type: object
+    properties:
+      nombre:
+        type: string
+      tablero:
+        type: integer
+
+  Listas:
+    type: object
+    required:
+      - total
+      - list
+    properties:
+      total:
+        type: number
+      list:
+        type: array
+        items:
+          $ref: '#/definitions/Lista'
+
+# Errors
+  ErrorModel:
+    type: object
+    required:
+      - message
+      - id
+    properties:
+      message:
+        type: string
+      code:
+        type: number
+      description:
+        type: object
