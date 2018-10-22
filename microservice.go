@@ -9,7 +9,7 @@ import (
 )
 
 func main(){
-	db,err := sql.Open("mysql","root:password@tcp(localhost:3306)/lists")
+	db,err := sql.Open("mysql","root:password@tcp(35.231.93.28:3305)/lists")
 	if err != nil{
 		fmt.Println(err.Error())
 	}
@@ -156,5 +156,5 @@ func main(){
 			"Mensaje": fmt.Sprintf("se ha borrado la lista exitosamente"),
 		})
 	})
-	router.Run(":3003")
+	router.Run(":3002")
 }
