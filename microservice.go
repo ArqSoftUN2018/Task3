@@ -9,7 +9,7 @@ import (
 )
 
 func main(){
-	db,err := sql.Open("mysql","root:password@tcp(127.0.0.1:3306)/lists")
+	db,err := sql.Open("mysql","root:password@tcp(localhost:3306)/lists")
 	if err != nil{
 		fmt.Println(err.Error())
 	}
@@ -29,7 +29,7 @@ func main(){
 
 	router := gin.Default()
 	
-	router.GET("/lista/:id", func(c * gin.Context){
+	router.GET("/listas/:id", func(c * gin.Context){
 		var (
 			objeto listas
 			resultado gin.H
@@ -77,7 +77,36 @@ func main(){
 		defer rows.Close()
 		c.JSON(http.StatusOK, resultado)
 	})
-	router.POST("/lista", func(c * gin.Context){
+
+	router.GET("/listas-tablero/:id", func(c * gin.Context){
+		var (
+			objeto listas
+			objetos gin.H
+			resultado []gin.H
+		)
+		id := c.Param("id")
+		rows,err := db.Query("Select id,nombre,tablero,archivado from listas where tablero = ?;", id)
+		if err != nil {
+			fmt.Println(err.Error())
+		}  
+		for rows.Next(){
+			err := rows.Scan(&objeto.id,&objeto.nombre,&objeto.tablero,&objeto.archivado)
+			objetos = gin.H {
+				"id": objeto.id,
+				"nombre": objeto.nombre,
+				"tablero": objeto.tablero,
+				"archivado": objeto.archivado,
+			}
+			resultado = append(resultado,objetos)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+		}
+		defer rows.Close()
+		c.JSON(http.StatusOK, resultado)
+	})
+	
+	router.POST("/listas", func(c * gin.Context){
 		nombre := c.PostForm("nombre")
 		tablero := c.PostForm("tablero")
 		archivado := false
@@ -94,7 +123,7 @@ func main(){
 			"Mensaje": fmt.Sprintf("se ha creado la lista exitosamente"),
 		})
 	})
-	router.PUT("/lista", func(c * gin.Context){
+	router.PUT("/listas", func(c * gin.Context){
 		id := c.Query("id")
 		nombre := c.PostForm("nombre")
 		archivado := c.PostForm("tablero")
@@ -112,7 +141,7 @@ func main(){
 		})
 	})
 
-	router.DELETE("/lista", func(c * gin.Context){
+	router.DELETE("/listas", func(c * gin.Context){
 		id := c.PostForm("id")
 		stmt, err := db.Prepare("delete from listas where id = ?;")
 		if err != nil {

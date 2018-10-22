@@ -138,6 +138,34 @@ paths:
           description: Error Inesperado
           schema:
             $ref: '#/definitions/ErrorModel'
+            
+  /listas-tablero/{id}:
+    get:
+      summary: Regresa una lista con id dado
+      operationId: obtenerListaTablero
+      parameters:
+        - name: id
+          in: path
+          description: El id del tablero del cual quiero obtener las listas
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: Ok
+          schema:
+            $ref: '#/definitions/Lista'
+        '404':
+          description: Not Found
+          schema:
+            $ref: '#/definitions/ErrorModel'
+        '406':
+            description: No aceptable (parametros invalidos)
+            schema:
+              $ref: '#/definitions/ErrorModel'
+        '500':
+          description: error inesperador
+          schema:
+            $ref: '#/definitions/ErrorModel'
 
 definitions:
 

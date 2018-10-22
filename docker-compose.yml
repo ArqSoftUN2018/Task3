@@ -1,5 +1,5 @@
 version: "2"
- services:
+services:
   lists-ms:
     build: .
     ports: 
@@ -8,11 +8,6 @@ version: "2"
       - lists-db
   lists-db:
     image: mysql:5.7
-    healthcheck:
-      test: "mysqlcheck -u$$MYSQL_USER -p$$MYSQL_PASSWORD $$MYSQL_DATABASE"
-      interval: 20s
-      timeout: 5s
-      retries: 15
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: lists
@@ -20,4 +15,3 @@ version: "2"
       MYSQL_PASSWORD: listsuser
     ports:
       - "27020:27020"
-    
