@@ -29,7 +29,7 @@ func main(){
 
 	router := gin.Default()
 	
-	router.GET("/listas/:id", func(c * gin.Context){
+	router.GET("/lists-ms/roesources/lists/:id", func(c * gin.Context){
 		var (
 			objeto listas
 			resultado gin.H
@@ -51,7 +51,7 @@ func main(){
 		c.JSON(http.StatusOK, resultado)
 	})
 
-	router.GET("/listas", func(c * gin.Context){
+	router.GET("/lists-ms/roesources/lists/", func(c * gin.Context){
 		var (
 			objeto listas
 			objetos gin.H
@@ -78,7 +78,7 @@ func main(){
 		c.JSON(http.StatusOK, resultado)
 	})
 
-	router.GET("/listas-tablero/:id", func(c * gin.Context){
+	router.GET("/lists-ms/roesources/lists-board/:id", func(c * gin.Context){
 		var (
 			objeto listas
 			objetos gin.H
@@ -106,7 +106,7 @@ func main(){
 		c.JSON(http.StatusOK, resultado)
 	})
 	
-	router.POST("/listas", func(c * gin.Context){
+	router.POST("/lists-ms/roesources/lists/", func(c * gin.Context){
 		nombre := c.PostForm("nombre")
 		tablero := c.PostForm("tablero")
 		archivado := false
@@ -123,7 +123,7 @@ func main(){
 			"Mensaje": fmt.Sprintf("se ha creado la lista exitosamente"),
 		})
 	})
-	router.PUT("/listas", func(c * gin.Context){
+	router.PUT("/lists-ms/roesources/lists/", func(c * gin.Context){
 		id := c.Query("id")
 		nombre := c.PostForm("nombre")
 		archivado := c.PostForm("tablero")
@@ -141,7 +141,7 @@ func main(){
 		})
 	})
 
-	router.DELETE("/listas", func(c * gin.Context){
+	router.DELETE("/lists-ms/roesources/lists/", func(c * gin.Context){
 		id := c.PostForm("id")
 		stmt, err := db.Prepare("delete from listas where id = ?;")
 		if err != nil {

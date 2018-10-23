@@ -15,3 +15,5 @@ services:
       MYSQL_PASSWORD: listsuser
     ports:
       - 3305:3306
+
+CREATE TABLE listas ( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, nombre VARCHAR(30), tablero VARCHAR(30), archivado BOOLEAN)
