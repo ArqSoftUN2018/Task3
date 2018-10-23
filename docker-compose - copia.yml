@@ -1,0 +1,17 @@
+version: '2'
+services:
+  lists-ms:
+    image:  bsdiaza/task3
+    ports: 
+      - 3002:3002
+    depends_on:
+      - lists-db
+  lists-db:
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: lists
+      MYSQL_USER: listsuser
+      MYSQL_PASSWORD: listsuser
+    ports:
+      - 3305:3306
