@@ -123,8 +123,8 @@ func main(){
 			"Mensaje": fmt.Sprintf("se ha creado la lista exitosamente"),
 		})
 	})
-	router.PUT("/lists-ms/resources/lists/", func(c * gin.Context){
-		id := c.Query("id")
+	router.PUT("/lists-ms/resources/lists/:id", func(c * gin.Context){
+		id := c.Param("id")
 		nombre := c.PostForm("nombre")
 		archivado := c.PostForm("tablero")
 		stmt, err := db.Prepare("update listas set nombre = ?, archivado = ? where id = ?;")
