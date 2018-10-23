@@ -3,7 +3,7 @@ services:
   lists-ms:
     build: .
     ports: 
-      - "3003:3003"
+      - "3002:3002"
     depends_on:
       - lists-db
   lists-db:
@@ -14,4 +14,4 @@ services:
       MYSQL_USER: listsuser
       MYSQL_PASSWORD: listsuser
     ports:
-      - "27020:27020"
+      - "3305:3306"
