@@ -126,7 +126,7 @@ func main(){
 	router.PUT("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		id := c.Param("id")
 		nombre := c.PostForm("nombre")
-		archivado := c.PostForm("tablero")
+		archivado := c.PostForm("archivado")
 		stmt, err := db.Prepare("update listas set nombre = ?, archivado = ? where id = ?;")
 		if err != nil {
 			fmt.Println(err.Error())
