@@ -20,101 +20,101 @@ func main(){
 		fmt.Println(err.Error())
 	}
 
-	type listas struct {
+	type list struct {
 		id int
-		nombre string
-		tablero string 
-		archivado bool
+		name string
+		board string 
+		archived bool
 	}
 
 	router := gin.Default()
 	
 	router.GET("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		var (
-			objeto listas
-			resultado gin.H
+			object list
+			result gin.H
 		)
 		id := c.Param("id")
-		row := db.QueryRow("Select * from listas where id = ?;", id)
-		err = row.Scan(&objeto.id,&objeto.nombre,&objeto.tablero,&objeto.archivado)
+		row := db.QueryRow("Select * from list where id = ?;", id)
+		err = row.Scan(&object.id,&object.name,&object.board,&object.archived)
 		if err != nil {
-			resultado = gin.H {
+			result = gin.H {
 			}
 		}else{
-			resultado = gin.H {
-				"id": objeto.id,
-				"nombre": objeto.nombre,
-				"tablero": objeto.tablero,
-				"archivado": objeto.archivado,
+			result = gin.H {
+				"id": object.id,
+				"name": object.name,
+				"board": object.board,
+				"archived": object.archived,
 			}
 		}
-		c.JSON(http.StatusOK, resultado)
+		c.JSON(http.StatusOK, result)
 	})
 
 	router.GET("/lists-ms/resources/lists/", func(c * gin.Context){
 		var (
-			objeto listas
-			objetos gin.H
-			resultado []gin.H
+			object list
+			objects gin.H
+			result []gin.H
 		)
-		rows,err := db.Query("Select id,nombre,tablero,archivado from listas;")
+		rows,err := db.Query("Select id,name,board,archived from list;")
 		if err != nil {
 			fmt.Println(err.Error())
 		}  
 		for rows.Next(){
-			err := rows.Scan(&objeto.id,&objeto.nombre,&objeto.tablero,&objeto.archivado)
-			objetos = gin.H {
-				"id": objeto.id,
-				"nombre": objeto.nombre,
-				"tablero": objeto.tablero,
-				"archivado": objeto.archivado,
+			err := rows.Scan(&object.id,&object.name,&object.board,&object.archived)
+			objects = gin.H {
+				"id": object.id,
+				"name": object.name,
+				"board": object.board,
+				"archived": object.archived,
 			}
-			resultado = append(resultado,objetos)
+			result = append(result,objects)
 			if err != nil {
 				fmt.Println(err.Error())
 			}
 		}
 		defer rows.Close()
-		c.JSON(http.StatusOK, resultado)
+		c.JSON(http.StatusOK, result)
 	})
 
 	router.GET("/lists-ms/resources/lists-board/:id", func(c * gin.Context){
 		var (
-			objeto listas
-			objetos gin.H
-			resultado []gin.H
+			object list
+			objects gin.H
+			result []gin.H
 		)
 		id := c.Param("id")
-		rows,err := db.Query("Select id,nombre,tablero,archivado from listas where tablero = ?;", id)
+		rows,err := db.Query("Select id,name,board,archived from list where board = ?;", id)
 		if err != nil {
 			fmt.Println(err.Error())
 		}  
 		for rows.Next(){
-			err := rows.Scan(&objeto.id,&objeto.nombre,&objeto.tablero,&objeto.archivado)
-			objetos = gin.H {
-				"id": objeto.id,
-				"nombre": objeto.nombre,
-				"tablero": objeto.tablero,
-				"archivado": objeto.archivado,
+			err := rows.Scan(&object.id,&object.name,&object.board,&object.archived)
+			objects = gin.H {
+				"id": object.id,
+				"name": object.name,
+				"board": object.board,
+				"archived": object.archived,
 			}
-			resultado = append(resultado,objetos)
+			result = append(result,objects)
 			if err != nil {
 				fmt.Println(err.Error())
 			}
 		}
 		defer rows.Close()
-		c.JSON(http.StatusOK, resultado)
+		c.JSON(http.StatusOK, result)
 	})
 	
 	router.POST("/lists-ms/resources/lists/", func(c * gin.Context){
-		nombre := c.PostForm("nombre")
-		tablero := c.PostForm("tablero")
-		archivado := false
-		stmt, err := db.Prepare("insert into listas (nombre, tablero, archivado) values(?,?,?);")
+		name := c.PostForm("name")
+		board := c.PostForm("board")
+		archived := false
+		stmt, err := db.Prepare("insert into list (name, board, archived) values(?,?,?);")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		_, err = stmt.Exec(nombre, tablero,archivado)
+		_, err = stmt.Exec(name, board,archived)
 
 		if err != nil {
 			fmt.Println(err.Error())
@@ -125,13 +125,13 @@ func main(){
 	})
 	router.PUT("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		id := c.Param("id")
-		nombre := c.PostForm("nombre")
-		archivado := c.PostForm("archivado")
-		stmt, err := db.Prepare("update listas set nombre = ?, archivado = ? where id = ?;")
+		name := c.PostForm("name")
+		archived := c.PostForm("archived")
+		stmt, err := db.Prepare("update list set name = ?, archived = ? where id = ?;")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		_, err = stmt.Exec(nombre, archivado, id)
+		_, err = stmt.Exec(name, archived, id)
 
 		if err != nil {
 			fmt.Println(err.Error())
@@ -143,7 +143,7 @@ func main(){
 
 	router.DELETE("/lists-ms/resources/lists/", func(c * gin.Context){
 		id := c.PostForm("id")
-		stmt, err := db.Prepare("delete from listas where id = ?;")
+		stmt, err := db.Prepare("delete from list where id = ?;")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
