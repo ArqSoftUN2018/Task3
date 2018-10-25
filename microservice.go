@@ -21,10 +21,10 @@ func main(){
 	}
 
 	type list struct {
-		id int
-		name string
-		board string 
-		archived bool
+		id int `form:"id" json:"id" binding:"required"`
+		name string `form:"name" json:"name" binding:"required"`
+		board string `form:"board" json:"board" binding:"required"`
+		archived bool `form:"archived" json:"archived" binding:"required"`
 	}
 
 	router := gin.Default()
@@ -107,21 +107,24 @@ func main(){
 	})
 	
 	router.POST("/lists-ms/resources/lists/", func(c * gin.Context){
-		name := c.PostForm("name")
-		board := c.PostForm("board")
-		archived := false
-		stmt, err := db.Prepare("insert into list (name, board, archived) values(?,?,?);")
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-		_, err = stmt.Exec(name, board,archived)
+		var json list
+		if c.BindJSON(&json)==nil{
+			name := json.name
+			board := json.board
+			archived := false
+			stmt, err := db.Prepare("insert into list (name, board, archived) values(?,?,?);")
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+			_, err = stmt.Exec(name, board,archived)
 
-		if err != nil {
-			fmt.Println(err.Error())
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+			c.JSON(http.StatusOK, gin.H{
+				"Mensaje": fmt.Sprintf("se ha creado la lista exitosamente"),
+			})
 		}
-		c.JSON(http.StatusOK, gin.H{
-			"Mensaje": fmt.Sprintf("se ha creado la lista exitosamente"),
-		})
 	})
 	router.PUT("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		id := c.Param("id")
