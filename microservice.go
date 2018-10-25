@@ -108,7 +108,7 @@ func main(){
 	
 	router.POST("/lists-ms/resources/lists/", func(c * gin.Context){
 		var json list
-		if c.BindJSON(&json)==nil{
+		if c.ShouldBindJSON(&json)==nil{
 			name := json.name
 			board := json.board
 			archived := false
