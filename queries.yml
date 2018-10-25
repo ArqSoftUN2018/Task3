@@ -1,0 +1,14 @@
+query{
+  listByCode(id: 1){
+    nombre
+  }
+}
+
+mutation{
+  createList(list:{
+    nombre:"asda"
+    tablero:"1"
+  }){
+    nombre
+  }
+}
