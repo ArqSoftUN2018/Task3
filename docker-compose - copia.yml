@@ -1,3 +1,4 @@
+2E-unaldo-lists
 version: '2'
 services:
   lists-ms:
@@ -16,4 +17,4 @@ services:
     ports:
       - 3305:3306
 
-CREATE TABLE listas ( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, nombre VARCHAR(30), tablero VARCHAR(30), archivado BOOLEAN);
+CREATE TABLE list ( id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY, name VARCHAR(30), board VARCHAR(30), archived BOOLEAN);

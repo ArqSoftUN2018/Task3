@@ -107,24 +107,21 @@ func main(){
 	})
 	
 	router.POST("/lists-ms/resources/lists/", func(c * gin.Context){
-		var json list
-		if c.ShouldBindJSON(&json)==nil{
-			name := json.name
-			board := json.board
-			archived := false
-			stmt, err := db.Prepare("insert into list (name, board, archived) values(?,?,?);")
-			if err != nil {
-				fmt.Println(err.Error())
-			}
-			_, err = stmt.Exec(name, board,archived)
-
-			if err != nil {
-				fmt.Println(err.Error())
-			}
-			c.JSON(http.StatusOK, gin.H{
-				"Mensaje": fmt.Sprintf("se ha creado la lista exitosamente"),
-			})
+		name := c.PostForm("name")
+		board := c.PostForm("board")
+		archived := false
+		stmt, err := db.Prepare("insert into list (name, board, archived) values(?,?,?);")
+		if err != nil {
+			fmt.Println(err.Error())
 		}
+		_, err = stmt.Exec(name, board,archived)
+
+		if err != nil {
+			fmt.Println(err.Error())
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"Mensaje": fmt.Sprintf("se ha creado la lista exitosamente"),
+		})
 	})
 	router.PUT("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		id := c.Param("id")
