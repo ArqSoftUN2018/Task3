@@ -35,7 +35,7 @@ func main(){
 	router.Use(cors.Middleware(cors.Config{
 		Origins:        "*",
 		Methods:        "GET, PUT, POST, DELETE",
-		RequestHeaders: "",
+		RequestHeaders: "Content-Type",
 		ExposedHeaders: "",
 		MaxAge: 50 * time.Second,
 		Credentials: true,
