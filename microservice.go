@@ -29,7 +29,7 @@ func main(){
 		archived bool `form:"archived" json:"archived" binding:"required"`
 	}
 
-	router := gin.Default()
+	router := gin.New()
 
 	router.Use(cors.Middleware(cors.Config{
 		Origins:        "*",
