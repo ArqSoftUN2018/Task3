@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"github.com/gin-gonic/gin"
 	"github.com/itsjamie/gin-cors"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -27,7 +28,7 @@ func main(){
 		archived bool `form:"archived" json:"archived" binding:"required"`
 	}
 
-	router := gin.New()
+	router := gin.Default()
 	
 	router.Use(cors.Middleware(cors.Config{
 		Origins:        "*",
