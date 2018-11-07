@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
 	_ "github.com/go-sql-driver/mysql"
 )
 
