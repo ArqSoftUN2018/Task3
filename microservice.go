@@ -30,8 +30,6 @@ func main(){
 	}
 
 	router := gin.Default()
-
-	router.Use(cors.Default())
 	
 	router.GET("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		var (
@@ -109,7 +107,8 @@ func main(){
 		defer rows.Close()
 		c.JSON(http.StatusOK, result)
 	})
-	
+
+	router.OPTIONS("/lists-ms/resources/lists/", preflight)
 	router.POST("/lists-ms/resources/lists/", func(c * gin.Context){
 		name := c.PostForm("name")
 		board := c.PostForm("board")
@@ -161,4 +160,10 @@ func main(){
 		})
 	})
 	router.Run(":3002")
+}
+
+func preflight(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")
+	c.Header("Access-Control-Allow-Headers", "access-control-allow-origin, access-control-allow-headers")
+	c.JSON(http.StatusOK, struct{}{})
 }
