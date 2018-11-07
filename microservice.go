@@ -3,7 +3,6 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"time"
 	"net/http"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/cors"
