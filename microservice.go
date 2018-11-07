@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
-	"github.com/gin-gonic/gin"
+	"github.com/itsjamie/gin-cors"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -27,8 +27,18 @@ func main(){
 		archived bool `form:"archived" json:"archived" binding:"required"`
 	}
 
-	router := gin.Default()
+	router := gin.New()
 	
+	router.Use(cors.Middleware(cors.Config{
+		Origins:        "*",
+		Methods:        "GET, PUT, POST, DELETE",
+		RequestHeaders: "",
+		ExposedHeaders: "",
+		MaxAge: 50 * time.Second,
+		Credentials: true,
+		ValidateHeaders: false,
+	}))
+
 	router.GET("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		var (
 			object list
