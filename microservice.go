@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
-	"time"
 	"github.com/gin-gonic/gin"
 	"github.com/itsjamie/gin-cors"
 	_ "github.com/go-sql-driver/mysql"
@@ -35,7 +34,7 @@ func main(){
 	router.Use(cors.Middleware(cors.Config{
 		Origins:        "*",
 		Methods:        "GET, PUT, POST, DELETE",
-		RequestHeaders: "Origin, Authorization, Content-Type",
+		RequestHeaders: "",
 		ExposedHeaders: "",
 		MaxAge: 50 * time.Second,
 		Credentials: true,
