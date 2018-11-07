@@ -6,7 +6,7 @@ import (
 	"time"
 	"net/http"
 	"github.com/gin-gonic/gin"
-	"github.com/itsjamie/gin-cors"
+	"github.com/gin-contrib/cors"
 	_ "github.com/go-sql-driver/mysql"
 )
 
@@ -30,17 +30,9 @@ func main(){
 		archived bool `form:"archived" json:"archived" binding:"required"`
 	}
 
-	router := gin.New()
+	router := gin.Default()
 
-	router.Use(cors.Middleware(cors.Config{
-		Origins:        "*",
-		Methods:        "GET, PUT, POST, DELETE",
-		RequestHeaders: "Content-Type",
-		ExposedHeaders: "",
-		MaxAge: 50 * time.Second,
-		Credentials: true,
-		ValidateHeaders: false,
-	}))
+	router.Use(cors.Default())
 	
 	router.GET("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		var (
