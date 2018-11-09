@@ -112,8 +112,8 @@ func main(){
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		Name := input.Name
-		Board := input.Board
+		Name := input.name
+		Board := input.board
 		Archived := false
 		stmt, err := db.Prepare("insert into list (Name, Board, Archived) values(?,?,?);")
 		if err != nil {

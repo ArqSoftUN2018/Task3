@@ -6,9 +6,13 @@ query{
 
 mutation{
   createList(list:{
-    nombre:"asda"
-    tablero:"1"
-  }){
-    nombre
+    name:"asda"
+    board:"1"
+  })
+}
+
+query{
+  allLists{
+    name
   }
 }
