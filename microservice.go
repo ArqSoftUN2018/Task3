@@ -135,8 +135,8 @@ func main(){
 			return
 		}
 		id := c.Param("id")
-		name := input.Name
-		archived := input.Archived
+		name := input.name
+		archived := input.archived
 		stmt, err := db.Prepare("update list set name = ?, archived = ? where id = ?;")
 		if err != nil {
 			fmt.Println(err.Error())
