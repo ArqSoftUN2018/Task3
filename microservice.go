@@ -22,10 +22,10 @@ func main(){
 	}
 
 	type List struct {
-		id int `form:"id" json:"id"`
-		name string `form:"name" json:"name"`
-		board string `form:"board" json:"board"`
-		archived bool `form:"archived" json:"archived"`
+		Id int `form:"Id" json:"id"`
+		Name string `form:"Name" json:"name"`
+		Board string `form:"Board" json:"board"`
+		Archived bool `form:"Archived" json:"archived"`
 	}
 
 	router := gin.Default()
@@ -37,16 +37,16 @@ func main(){
 		)
 		id := c.Param("id")
 		row := db.QueryRow("Select * from list where id = ?;", id)
-		err = row.Scan(&object.id,&object.name,&object.board,&object.archived)
+		err = row.Scan(&object.Id,&object.Name,&object.Board,&object.Archived)
 		if err != nil {
 			result = gin.H {
 			}
 		}else{
 			result = gin.H {
-				"id": object.id,
-				"name": object.name,
-				"board": object.board,
-				"archived": object.archived,
+				"id": object.Id,
+				"name": object.Name,
+				"board": object.Board,
+				"archived": object.Archived,
 			}
 		}
 		c.JSON(http.StatusOK, result)
@@ -63,12 +63,12 @@ func main(){
 			fmt.Println(err.Error())
 		}  
 		for rows.Next(){
-			err := rows.Scan(&object.id,&object.name,&object.board,&object.archived)
+			err := rows.Scan(&object.Id,&object.Name,&object.Board,&object.Archived)
 			objects = gin.H {
-				"id": object.id,
-				"name": object.name,
-				"board": object.board,
-				"archived": object.archived,
+				"id": object.Id,
+				"name": object.Name,
+				"board": object.Board,
+				"archived": object.Archived,
 			}
 			result = append(result,objects)
 			if err != nil {
@@ -79,7 +79,7 @@ func main(){
 		c.JSON(http.StatusOK, result)
 	})
 
-	router.GET("/lists-ms/resources/listsFromboard/:board", func(c * gin.Context){
+	router.GET("/lists-ms/resources/listsFromBoard/:board", func(c * gin.Context){
 		var (
 			object List
 			objects gin.H
@@ -91,12 +91,12 @@ func main(){
 			fmt.Println(err.Error())
 		}  
 		for rows.Next(){
-			err := rows.Scan(&object.id,&object.name,&object.board,&object.archived)
+			err := rows.Scan(&object.Id,&object.Name,&object.Board,&object.Archived)
 			objects = gin.H {
-				"id": object.id,
-				"name": object.name,
-				"board": object.board,
-				"archived": object.archived,
+				"id": object.Id,
+				"name": object.Name,
+				"board": object.Board,
+				"archived": object.Archived,
 			}
 			result = append(result,objects)
 			if err != nil {
@@ -112,14 +112,14 @@ func main(){
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		name := input.name
-		board := input.board
-		archived := false
-		stmt, err := db.Prepare("insert into list (name, board, archived) values(?,?,?);")
+		Name := input.Name
+		Board := input.Board
+		Archived := false
+		stmt, err := db.Prepare("insert into list (Name, Board, Archived) values(?,?,?);")
 		if err != nil {
 			fmt.Println(err.Error())
 		}
-		_, err = stmt.Exec(name, board,archived)
+		_, err = stmt.Exec(Name, Board,Archived)
 
 		if err != nil {
 			fmt.Println(err.Error())
@@ -135,8 +135,8 @@ func main(){
 			return
 		}
 		id := c.Param("id")
-		name := input.name
-		archived := input.archived
+		name := input.Name
+		archived := input.Archived
 		stmt, err := db.Prepare("update list set name = ?, archived = ? where id = ?;")
 		if err != nil {
 			fmt.Println(err.Error())
