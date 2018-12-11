@@ -10,7 +10,7 @@ import (
 
 
 func main(){
-	db,err := sql.Open("mysql","root:password@tcp(lists-db:3306)/lists")
+	db,err := sql.Open("mysql","root:password@tcp(localhost:3306)/lists")
 	if err != nil{
 		fmt.Println(err.Error())
 	}
