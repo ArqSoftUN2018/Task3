@@ -21,26 +21,18 @@ func main(){
 		fmt.Println(err.Error())
 	}
 
-<<<<<<< HEAD
-	type list struct {
-		id int `form:"id" json:"id" binding:"required"`
-		name string `form:"name" json:"name" binding:"required"`
-		board string `form:"board" json:"board" binding:"required"`
-		archived bool `form:"archived" json:"archived" binding:"required"`
-=======
 	type List struct {
 		id int `form:"id" json:"id"`
 		name string `form:"name" json:"name"`
 		board string `form:"board" json:"board"`
 		archived bool `form:"archived" json:"archived"`
->>>>>>> test
 	}
 
 	router := gin.Default()
 	
 	router.GET("/lists-ms/resources/lists/:id", func(c * gin.Context){
 		var (
-			object list
+			object List
 			result gin.H
 		)
 		id := c.Param("id")
@@ -62,11 +54,11 @@ func main(){
 
 	router.GET("/lists-ms/resources/lists/", func(c * gin.Context){
 		var (
-			object list
+			object List
 			objects gin.H
 			result []gin.H
 		)
-		rows,err := db.Query("Select id,name,board,archived from list;")
+		rows,err := db.Query("Select * from list;")
 		if err != nil {
 			fmt.Println(err.Error())
 		}  
@@ -87,18 +79,14 @@ func main(){
 		c.JSON(http.StatusOK, result)
 	})
 
-<<<<<<< HEAD
-	router.GET("/lists-ms/resources/lists-board/:id", func(c * gin.Context){
-=======
 	router.GET("/lists-ms/resources/listsFromboard/:board", func(c * gin.Context){
->>>>>>> test
 		var (
-			object list
+			object List
 			objects gin.H
 			result []gin.H
 		)
-		id := c.Param("id")
-		rows,err := db.Query("Select id,name,board,archived from list where board = ?;", id)
+		board := c.Param("board")
+		rows,err := db.Query("Select * from list where board = ?;", board)
 		if err != nil {
 			fmt.Println(err.Error())
 		}  
@@ -118,12 +106,7 @@ func main(){
 		defer rows.Close()
 		c.JSON(http.StatusOK, result)
 	})
-
 	router.POST("/lists-ms/resources/lists/", func(c * gin.Context){
-<<<<<<< HEAD
-		name := c.PostForm("name")
-		board := c.PostForm("board")
-=======
 		var input List
 		if err := c.ShouldBindJSON(&input); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -131,7 +114,6 @@ func main(){
 		}
 		name := input.name
 		board := input.board
->>>>>>> test
 		archived := false
 		stmt, err := db.Prepare("insert into list (name, board, archived) values(?,?,?);")
 		if err != nil {
@@ -147,9 +129,14 @@ func main(){
 		})
 	})
 	router.PUT("/lists-ms/resources/lists/:id", func(c * gin.Context){
+		var input List
+		if err := c.ShouldBindJSON(&input); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 		id := c.Param("id")
-		name := c.PostForm("name")
-		archived := c.PostForm("archived")
+		name := input.name
+		archived := input.archived
 		stmt, err := db.Prepare("update list set name = ?, archived = ? where id = ?;")
 		if err != nil {
 			fmt.Println(err.Error())
@@ -164,8 +151,8 @@ func main(){
 		})
 	})
 
-	router.DELETE("/lists-ms/resources/lists/", func(c * gin.Context){
-		id := c.PostForm("id")
+	router.DELETE("/lists-ms/resources/lists/:id", func(c * gin.Context){
+		id := c.Param("id")
 		stmt, err := db.Prepare("delete from list where id = ?;")
 		if err != nil {
 			fmt.Println(err.Error())
@@ -182,8 +169,4 @@ func main(){
 	router.Run(":3002")
 }
 
-func preflight(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")
-	c.Header("Access-Control-Allow-Headers", "access-control-allow-origin, access-control-allow-headers")
-	c.JSON(http.StatusOK, struct{}{})
-}
+
