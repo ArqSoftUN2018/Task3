@@ -8,3 +8,4 @@ RUN go install -v ./...
 
 CMD ["app"]
 
+EXPOSE 3002
